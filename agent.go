@@ -1,0 +1,60 @@
+package main
+
+import (
+	"context"
+	"log"
+	"os"
+
+	"google.golang.org/adk/v2/agent/llmagent"
+	"google.golang.org/adk/v2/model/gemini"
+	"google.golang.org/adk/v2/tool"
+	"google.golang.org/genai"
+
+	"multi-agent-tool/data"
+	"multi-agent-tool/tools"
+)
+
+func main() {
+	ctx := context.Background()
+
+
+	model, err := gemini.NewModel(ctx, tools.MODEL, &genai.ClientConfig{
+		APIKey: os.Getenv("GOOGLE_API_KEY"),
+	})
+	if err != nil {
+		log.Fatalf("Failed to create model: %v", err)
+	}
+
+	weatherTool, err := tools.NewTool("getWeather", "Retrieves the current weather report for a specified city.", data.GetWeather)
+	if err != nil {
+		log.Fatalf("Failed to create getWeather tool: %v", err)
+	}
+
+	currentTimeTool, err := tools.NewTool("getCurrentTime", "Returns the current time in a specified city.", data.GetCurrentTime)
+	if err != nil {
+		log.Fatalf("Failed to create getCurrentTime tool: %v", err)
+	}
+
+	rootAgent, err := llmagent.New(llmagent.Config{
+		Name:        "weather_time_agent",
+		Model:       model,
+		Description: "Agent to answer questions about the time and weather in a city.",
+		Instruction: `You are a helpful agent who can answer user questions about the time and weather in a city.
+						All metrics are returned in American Standard units (Fahrenheit, mph, etc.).
+						Use all of the data returned from the tools to provide the most appropriate responses.
+						You can also have a conversation on the data that you report. One question or statement at a time.
+						`,
+		Tools: []tool.Tool{
+			weatherTool,
+			currentTimeTool,
+		},
+	})
+
+	if err != nil {
+		log.Fatalf("Failed to create agent: %v", err)
+	}
+
+	if err := tools.LaunchAgent(ctx, rootAgent); err != nil {
+		log.Fatalf("Run failed: %v", err)
+	}
+}
