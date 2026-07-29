@@ -73,8 +73,6 @@ type weatherReport struct {
 		TotalSnow string `json:"totalSnow_cm"`
 		UvIndex     string `json:"uvIndex"`
 	} `json:"weather"`
-	Status       string
-	ErrorMessage string
 }
 
 
