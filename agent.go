@@ -12,6 +12,7 @@ import (
 
 	"multi-agent-tool/data"
 	"multi-agent-tool/tools"
+	_ "time/tzdata"
 )
 
 func main() {
@@ -35,7 +36,7 @@ func main() {
 	}
 
 	rootAgent, err := llmagent.New(llmagent.Config{
-		Name:        "weather_time_agent",
+		Name:        "Weather and Time Agent",
 		Model:       model,
 		Description: "Agent to answer questions about the time and weather in a city.",
 		Instruction: `You are a helpful agent who can answer user questions about the time and weather in a city.
