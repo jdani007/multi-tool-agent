@@ -17,7 +17,6 @@ import (
 func main() {
 	ctx := context.Background()
 
-
 	model, err := gemini.NewModel(ctx, tools.MODEL, &genai.ClientConfig{
 		APIKey: os.Getenv("GOOGLE_API_KEY"),
 	})
@@ -40,7 +39,7 @@ func main() {
 		Model:       model,
 		Description: "Agent to answer questions about the time and weather in a city.",
 		Instruction: `You are a helpful agent who can answer user questions about the time and weather in a city.
-						All metrics are returned in American Standard units (Fahrenheit, mph, etc.).
+						All metrics are returned in American Standard units (Fahrenheit, mph, etc.) by default. Provide conversions is requested.
 						Use all of the data returned from the tools to provide the most appropriate responses.
 						You can also have a conversation on the data that you report. One question or statement at a time.
 						`,
