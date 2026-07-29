@@ -9,6 +9,10 @@ import (
 	"google.golang.org/adk/v2/agent"
 )
 
+type weatherInput struct {
+	City string
+}
+
 type weatherReport struct {
 	CurrentCondition []struct {
 		FeelsLike      string `json:"FeelsLikeF"`
@@ -74,10 +78,10 @@ type weatherReport struct {
 }
 
 
-func GetWeather(_ agent.Context, args inputArgs) (weatherReport, error) {
+func GetWeather(_ agent.Context, args weatherInput) (weatherReport, error) {
 	report, err := getExternalWeather(args.City)
 	if err != nil {
-		return weatherReport{}, fmt.Errorf("unable to get weather report for %v: %v", args.City, err)
+		return weatherReport{}, fmt.Errorf("unable to get weather report: %v",err)
 	}
 	return report, nil
 }
