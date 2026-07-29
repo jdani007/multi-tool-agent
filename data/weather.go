@@ -70,7 +70,6 @@ type weatherReport struct {
 		UvIndex     string `json:"uvIndex"`
 	} `json:"weather"`
 	Status       string
-	// Message string
 	ErrorMessage string
 }
 
