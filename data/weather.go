@@ -95,7 +95,7 @@ func getExternalWeather(city string) (weatherReport, error) {
 
 	body,  err := io.ReadAll(resp.Body)
 	if err != nil {
-		return weatherReport{}, nil
+		return weatherReport{}, err
 	}
 
 	var report weatherReport
