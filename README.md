@@ -1,4 +1,4 @@
-# Multi-tool weather and time agent
+# Multi-tool Weather and Time Agent
 
 This project is a small Go-based agent demo built with the Google ADK. It uses a Gemini model plus two tools:
 
