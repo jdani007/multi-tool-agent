@@ -1,4 +1,4 @@
-package helpers
+package main
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 
 const MODEL = "gemini-3.1-flash-lite"
 
-func NewTool[TArgs, TResults any](name, description string, handler functiontool.Func[TArgs, TResults]) (tool.Tool, error) {
+func newTool[TArgs, TResults any](name, description string, handler functiontool.Func[TArgs, TResults]) (tool.Tool, error) {
 	tool, err := functiontool.New(
 		functiontool.Config{
 			Name:        name,
@@ -29,7 +29,7 @@ func NewTool[TArgs, TResults any](name, description string, handler functiontool
 	return tool, nil
 }
 
-func LaunchAgent(ctx context.Context, a agent.Agent) error {
+func launchAgent(ctx context.Context, a agent.Agent) error {
 	launcherConfig := &launcher.Config{
 		AgentLoader: agent.NewSingleLoader(a),
 	}
