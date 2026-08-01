@@ -12,8 +12,10 @@ import (
 	"google.golang.org/adk/v2/tool/functiontool"
 )
 
+// MODEL is the Gemini model used by the agent for inference.
 const MODEL = "gemini-3.1-flash-lite"
 
+// newTool wraps a function tool with the metadata needed by the agent framework.
 func newTool[TArgs, TResults any](name, description string, handler functiontool.Func[TArgs, TResults]) (tool.Tool, error) {
 	tool, err := functiontool.New(
 		functiontool.Config{
@@ -29,6 +31,7 @@ func newTool[TArgs, TResults any](name, description string, handler functiontool
 	return tool, nil
 }
 
+// launchAgent starts the interactive agent runner with the provided agent instance.
 func launchAgent(ctx context.Context, a agent.Agent) error {
 	launcherConfig := &launcher.Config{
 		AgentLoader: agent.NewSingleLoader(a),

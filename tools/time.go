@@ -6,14 +6,17 @@ import (
 	"google.golang.org/adk/v2/agent"
 )
 
+// timeInput holds the IANA time zone identifier for the requested location.
 type timeInput struct {
 	IANATimeZone string
 }
 
+// timeOutput contains the formatted time returned to the agent.
 type timeOutput struct {
-	Time       string
+	Time string
 }
 
+// GetCurrentTime returns the current local time for the requested time zone.
 func GetCurrentTime(_ agent.Context, args timeInput) (timeOutput, error) {
 
 	timeZone, err := time.LoadLocation(args.IANATimeZone)

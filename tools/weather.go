@@ -9,23 +9,25 @@ import (
 	"google.golang.org/adk/v2/agent"
 )
 
+// weatherInput describes the city the caller wants weather data for.
 type weatherInput struct {
 	City string
 }
 
+// weatherReport captures the structured weather data returned from the external API.
 type weatherReport struct {
 	CurrentCondition []struct {
-		FeelsLike      string `json:"FeelsLikeF"`
-		Cloudcover      string `json:"cloudcover"`
-		Humidity        string `json:"humidity"`
-		ObservationTime string `json:"observation_time"`
-		Precipitation    string `json:"precipInches"`
-		Pressure  string `json:"pressureInches"`
-		Temperature           string `json:"temp_F"`
-		UvIndex         string `json:"uvIndex"`
-		Visibility string `json:"visibilityMiles"`
-		WeatherCode     string `json:"weatherCode"`
-		WeatherDescription     []struct {
+		FeelsLike          string `json:"FeelsLikeF"`
+		Cloudcover         string `json:"cloudcover"`
+		Humidity           string `json:"humidity"`
+		ObservationTime    string `json:"observation_time"`
+		Precipitation      string `json:"precipInches"`
+		Pressure           string `json:"pressureInches"`
+		Temperature        string `json:"temp_F"`
+		UvIndex            string `json:"uvIndex"`
+		Visibility         string `json:"visibilityMiles"`
+		WeatherCode        string `json:"weatherCode"`
+		WeatherDescription []struct {
 			Value string `json:"value"`
 		} `json:"weatherDesc"`
 		WeatherIconURL []struct {
@@ -33,7 +35,7 @@ type weatherReport struct {
 		} `json:"weatherIconUrl"`
 		Winddir16Point string `json:"winddir16Point"`
 		WinddirDegree  string `json:"winddirDegree"`
-		Windspeed string `json:"windspeedMiles"`
+		Windspeed      string `json:"windspeedMiles"`
 	} `json:"current_condition"`
 	NearestArea []struct {
 		City []struct {
@@ -65,26 +67,26 @@ type weatherReport struct {
 			Sunrise          string `json:"sunrise"`
 			Sunset           string `json:"sunset"`
 		} `json:"astronomy"`
-		Averagetemperature    string `json:"avgtempF"`
-		Date        string `json:"date"`
-		MaximumTemperature    string `json:"maxtempF"`
-		MinimumTemperature    string `json:"mintempF"`
-		SunHour     string `json:"sunHour"`
-		TotalSnow string `json:"totalSnow_cm"`
-		UvIndex     string `json:"uvIndex"`
+		Averagetemperature string `json:"avgtempF"`
+		Date               string `json:"date"`
+		MaximumTemperature string `json:"maxtempF"`
+		MinimumTemperature string `json:"mintempF"`
+		SunHour            string `json:"sunHour"`
+		TotalSnow          string `json:"totalSnow_cm"`
+		UvIndex            string `json:"uvIndex"`
 	} `json:"weather"`
 }
 
-
+// GetWeather fetches the current weather report for the provided city.
 func GetWeather(_ agent.Context, args weatherInput) (weatherReport, error) {
 	report, err := getExternalWeather(args.City)
 	if err != nil {
-		return weatherReport{}, fmt.Errorf("unable to get weather report: %v",err)
+		return weatherReport{}, fmt.Errorf("unable to get weather report: %v", err)
 	}
 	return report, nil
 }
 
-
+// getExternalWeather calls the wttr.in API and unmarshals the JSON weather payload.
 func getExternalWeather(city string) (weatherReport, error) {
 	url := fmt.Sprintf("https://wttr.in/%v?format=j2", city)
 	resp, err := http.Get(url)
@@ -93,7 +95,7 @@ func getExternalWeather(city string) (weatherReport, error) {
 	}
 	defer resp.Body.Close()
 
-	body,  err := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return weatherReport{}, err
 	}
